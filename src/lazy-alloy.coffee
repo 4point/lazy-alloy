@@ -177,6 +177,7 @@ class Application
 
     return null unless inpath ".coffee"
 
+    return {type: "theme", fromTo: ["coffee", "tss"]} if inpath "themes/"
     return {type: "style", fromTo: ["coffee", "tss"]} if inpath "styles/"
     return {type: "alloy", fromTo: ["coffee", "js"]} if inpath "alloy.coffee"
     return {type: "controller", fromTo: ["coffee", "js"]} if inpath "controllers/"
