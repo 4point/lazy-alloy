@@ -201,6 +201,9 @@ class Compiler
   styles: ->
     @process "styles/", "coffee", "tss"
 
+  themes: ->
+    @process "themes/", "coffee", "tss"
+
   widgets: ->
     widgets = fs.readdirSync "#{@subfolder}/widgets"
     for widget in widgets
@@ -215,6 +218,7 @@ class Compiler
     @process "./alloy.coffee", "coffee", "js"
 
   all: ->
+    @themes()
     @views()
     @controllers()
     @styles()
@@ -244,7 +248,7 @@ class Compiler
     return @logger.debug "No '*.#{from}' files need to preprocess.. #{files.length} files" if files.length is 0
 
     # Create necessary directory in case it doesn't exist
-    paths = ['app', 'app/controllers', 'app/styles', 'app/views', 'app/lib']
+    paths = ['app', 'app/controllers', 'app/styles', 'app/views', 'app/lib', 'app/themes']
     for path in paths
       unless fs.existsSync path
         fs.mkdirSync path
@@ -303,6 +307,7 @@ class Generator
     mkdir subfolder+'controllers'
     mkdir subfolder+'widgets'
     mkdir subfolder+'lib'
+    mkdir subfolder+'themes'
     console.debug 'Setup complete.'
     process.exit()
 
@@ -324,6 +329,8 @@ class Generator
         createWidget name
       when 'lib'
         createLibrary name
+      when 'theme'
+        createTheme name
       else
         console.info "Don't know how to build #{type}"
     process.exit()
@@ -341,6 +348,10 @@ class Generator
   createStyle = (name) ->
     console.debug "Building style #{name}"
     touch app.subfolder + 'styles/' + name + '.coffee'
+
+  createTheme = (name) ->
+    console.debug "Building theme #{name}"
+    touch app.subfolder + 'themes/' + name + '.coffee'
 
   createModel = (name) ->
     console.debug "Building model #{name}"
